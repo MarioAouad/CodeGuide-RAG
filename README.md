@@ -1,5 +1,7 @@
 # CodeGuide: a small code-explanation RAG
 
+> **Public repository:** The course sample notebook `Knowledge_Source/lab01.ipynb` is excluded from this public repository. To use the application, upload your own `.ipynb`, `.py`, `.md`, or `.txt` file and click **Index files**. The **Load sample notebook** demonstration requires the original notebook.
+
 CodeGuide answers questions about Python code and notebooks. It retrieves
 relevant excerpts locally, sends the question and those excerpts to Gemini,
 and shows the answer beside the original source evidence.

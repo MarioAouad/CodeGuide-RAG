@@ -1,0 +1,2 @@
+# Optional tooling for scripts/capture_evidence.py; not required to run the app.
+playwright==1.65.2
