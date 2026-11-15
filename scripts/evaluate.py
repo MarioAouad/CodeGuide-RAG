@@ -28,12 +28,19 @@ def main() -> None:
         "--live", action="store_true", help="Send questions to configured Gemini API"
     )
     args = parser.parse_args()
+    sample_path = ROOT / "Knowledge_Source" / "lab01.ipynb"
+    if not sample_path.is_file():
+        parser.error(
+            "This course-specific evaluation requires Knowledge_Source/lab01.ipynb, "
+            "which is excluded from the public repository. Use pytest for offline tests "
+            "or upload your own files in the application."
+        )
     settings = load_settings()
     if args.live and not settings.api_key:
         parser.error("Set GEMINI_API_KEY locally before using --live.")
     embedder = LocalEmbedder(settings.embedding_model)
     index = build_index(
-        {"lab01.ipynb": (ROOT / "Knowledge_Source" / "lab01.ipynb").read_bytes()},
+        {"lab01.ipynb": sample_path.read_bytes()},
         embedder,
         settings,
     )

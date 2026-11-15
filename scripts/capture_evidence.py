@@ -32,6 +32,11 @@ def main() -> None:
         "--workflow", action="store_true", help="Also capture upload and reset states."
     )
     args = parser.parse_args()
+    if not (ROOT / "Knowledge_Source" / "lab01.ipynb").is_file():
+        parser.error(
+            "This course-specific capture script requires Knowledge_Source/lab01.ipynb, "
+            "which is excluded from the public repository. See the README for the upload demo."
+        )
     if not args.live:
         parser.error("Use --live to authorize sending test questions to configured Gemini.")
     OUT.mkdir(exist_ok=True)

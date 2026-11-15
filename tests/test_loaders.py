@@ -3,24 +3,21 @@ import json
 
 import pytest
 
-from rag.config import ROOT
 from rag.loaders import SourceError, heading_in, load_corpus, load_file
 
 
-def test_sample_inventory_and_unchanged_bytes():
-    path = ROOT / "Knowledge_Source" / "lab01.ipynb"
+def test_sample_inventory_and_unchanged_bytes(sample_notebook):
+    path = sample_notebook
     before = path.read_bytes()
     sources = load_file(path.name, before)
-    assert len(sources) == 25
-    assert sum(item.cell_type == "code" for item in sources) == 15
-    assert sum(item.cell_type == "markdown" for item in sources) == 10
-    assert [item.cell_index for item in sources] == list(range(1, 26))
-    assert "def loss(w, b):" in sources[3].text
-    assert sources[3].heading == "Exercise 1: the loss"
+    assert len(sources) == 4
+    assert sum(item.cell_type == "code" for item in sources) == 2
+    assert sum(item.cell_type == "markdown" for item in sources) == 2
+    assert [item.cell_index for item in sources] == list(range(1, 5))
+    assert "def greet(name):" in sources[1].text
+    assert sources[1].heading == "Greeting example"
     assert path.read_bytes() == before
-    assert hashlib.sha256(before).hexdigest() == (
-        "b18ba9814f435753acde24892cb57e95e161e683548d0cc2f943e9039dbcb68c"
-    )
+    assert all(item.file_hash == hashlib.sha256(before).hexdigest() for item in sources)
 
 
 def test_notebook_sources_only_with_true_cell_positions():

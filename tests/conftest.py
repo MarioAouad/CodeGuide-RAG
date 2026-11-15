@@ -1,6 +1,7 @@
 """Deterministic test doubles; unit tests never download a model or call an API."""
 
 import hashlib
+import json
 import re
 
 import numpy as np
@@ -41,3 +42,26 @@ def embedder():
 @pytest.fixture
 def settings(tmp_path):
     return Settings(index_dir=tmp_path / "index")
+
+
+@pytest.fixture
+def sample_notebook(tmp_path):
+    """An original test fixture; no private course notebook is needed."""
+    notebook = {
+        "cells": [
+            {"cell_type": "markdown", "source": "# Greeting example\nA small function."},
+            {
+                "cell_type": "code",
+                "source": "def greet(name):\n    return f'Hello, {name}'\n",
+            },
+            {"cell_type": "markdown", "source": "## Example call\nCall the greeting function."},
+            {"cell_type": "code", "source": "greet('reader')\n"},
+        ],
+        "metadata": {},
+        "nbformat": 4,
+        "nbformat_minor": 5,
+    }
+    path = tmp_path / "Knowledge_Source" / "lab01.ipynb"
+    path.parent.mkdir()
+    path.write_text(json.dumps(notebook), encoding="utf-8")
+    return path

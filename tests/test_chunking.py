@@ -1,15 +1,14 @@
 from rag.chunking import chunk_sources, token_count
-from rag.config import ROOT
 from rag.loaders import load_file
 from rag.models import Source
 
 
-def test_sample_chunk_locations_and_token_budget(embedder):
-    sources = load_file("lab01.ipynb", (ROOT / "Knowledge_Source/lab01.ipynb").read_bytes())
+def test_sample_chunk_locations_and_token_budget(embedder, sample_notebook):
+    sources = load_file(sample_notebook.name, sample_notebook.read_bytes())
     chunks = chunk_sources(sources, embedder.tokenizer)
     originals = {source.cell_index: source.text for source in sources}
     assert len({chunk.chunk_id for chunk in chunks}) == len(chunks)
-    assert {chunk.cell_index for chunk in chunks} == set(range(1, 26))
+    assert {chunk.cell_index for chunk in chunks} == set(range(1, 5))
     for chunk in chunks:
         text = originals[chunk.cell_index]
         assert chunk.text == text[chunk.start_offset : chunk.end_offset]

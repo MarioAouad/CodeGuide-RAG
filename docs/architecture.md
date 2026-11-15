@@ -10,7 +10,7 @@ Notebook-only fields are `None` for plain files. `file_hash` is SHA-256 over the
 original file bytes, including the notebook JSON; saved outputs never become
 source text even though changing them changes the file hash.
 
-`Chunk` contains the plan's required fields:
+`Chunk` contains these source-location and retrieval fields:
 
 | Field | Meaning |
 | --- | --- |
@@ -56,7 +56,8 @@ raw exception strings that might contain sensitive data.
 ## Trust boundaries
 
 Source files are data. JSON decoding and AST parsing never execute user code.
-Notebook links, saved outputs, and attachments are ignored. Source filenames are
+Links in source text are never followed; saved notebook outputs and attachments are
+excluded from retrieval. Source filenames are
 reduced to display basenames, and corpus hashes determine cache directories.
 Duplicate basenames are rejected to keep references unambiguous.
 
